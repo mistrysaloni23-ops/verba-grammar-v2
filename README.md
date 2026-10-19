@@ -2,7 +2,7 @@
 
 A React + TypeScript + Vite English editor with Google Gemini behind Cloudflare Pages Functions. The app implements minimal correction and natural rewriting, idle correction, mode-aware in-memory caching, cancellation, comparison, copy, clear, history, responsive layouts, and dark/light themes.
 
-**Status:** [source published on GitHub](https://github.com/mistrysaloni23-ops/verba-grammar-v2); 53 server tests pass. Source is published on GitHub. Dependency installation, TypeScript checking, Vite production build and Pages Functions compilation have succeeded in GitHub Actions. **18 desktop/mobile browser tests and the local Pages runtime smoke test pass.** See the [successful CI run](https://github.com/mistrysaloni23-ops/verba-grammar-v2/actions/runs/39208761531). Cloudflare deployment and live Gemini evaluation still require account configuration. No public deployment exists. See [verification report](docs/VERIFICATION.md).
+**Status:** Deployed at **https://verba-grammar-v2.pages.dev** through Cloudflare Pages with GitHub integration. **53 server tests, 18 desktop/mobile browser tests, TypeScript, the production build and the local Pages runtime smoke test pass.** AI corrections remain unavailable pending secure account setup and live Gemini verification. See the [verification report](docs/VERIFICATION.md) and [secure setup guide](docs/SECURE-SETUP.md).
 
 ## Architecture
 

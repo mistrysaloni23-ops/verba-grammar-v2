@@ -41,14 +41,14 @@ The [official documentation workflow](https://github.com/mistrysaloni23-ops/verb
 
 ## Still unverified / required before launch completion
 
-- Cloudflare account provisioning, real D1 binding, encrypted runtime secrets, Turnstile widget and production deployment.
-- Automatic production deployment and PR previews via the owner's Cloudflare Git connection.
+- Real D1 binding, encrypted runtime secrets and production Turnstile widget.
+- PR preview behavior via the owner's Cloudflare Git connection.
 - Authenticated eligibility and actual quotas for the owner's unbilled Gemini project.
 - Real corrections in both modes using Gemini 3.8 Flash and 3.6 Flash, full corpus comparison, human grammar/fluency/meaning review, and actual p50/p95 latency.
 - Production distributed quota enforcement and live bot checks.
 
-No public website URL or live AI accuracy percentage is claimed. The local workspace proxy still fails, but GitHub Actions has completed the dependency/build/browser checks independently. GitHub repository installation and source-write access are verified.
+Cloudflare reports a successful production deployment of commit `f36957d7759e16aebfe90a4e8bdf1c0488c68e95` at **https://verba-grammar-v2.pages.dev**, deployment `e42a5d6b-9236-472e-8ccc-556884e1058e`. Native GitHub integration is connected. This confirms deployment, not live correction quality. No live AI accuracy percentage is claimed. The local workspace proxy still fails, but GitHub Actions has completed the dependency/build/browser checks independently. GitHub repository installation and source-write access are verified.
 
 ## Acceptance status
 
-Source publication, build, automated application tests, and local Pages runtime verification are complete. The owner's overall completion requirements remain open until Cloudflare deployment and live Gemini verification succeed.
+Source publication, build, automated application tests, and local Pages runtime verification are complete. The owner's overall completion requirements remain open until secure runtime configuration and live Gemini verification succeed.

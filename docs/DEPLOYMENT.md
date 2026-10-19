@@ -2,15 +2,9 @@
 
 ## Current status
 
-No Cloudflare account/API token, Gemini API key, D1 database, Turnstile widget, or verified model was provided in this session. The owner created the repository and installed the ChatGPT Codex Connector. Source publication to `mistrysaloni23-ops/verba-grammar-v2` is verified; GitHub Actions can install dependencies and execute checks. The local CLI/network remains unavailable. The initial deployment has no D1 binding and keeps AI disabled. Add the real DB binding before enabling corrections.
+The owner connected GitHub and deployed **https://verba-grammar-v2.pages.dev** through Cloudflare Pages. Production uses branch `main`, framework preset `None`, build command `npm run build`, output `dist`, and Node 24. Cloudflare's deployment check reports success.
 
-## Owner actions that require account access
-
-The engineer should do the configuration and commands once authorized. The owner should not edit code or upload individual files.
-
-1. **GitHub:** Open https://github.com/new, use `verba-grammar-v2`, leave it empty, and select **Create repository**. In GitHub **Settings → Applications → Installed GitHub Apps**, locate the ChatGPT/OpenAI connection, select **Configure**, and include this repository in repository access. The exact app label can vary.
-2. **Gemini:** Open https://aistudio.google.com/api-keys. Select **Create API key** for a project without paid billing. Do not select a billing upgrade. Provide the key through the environment's secret configuration or Cloudflare's encrypted secrets interface; never paste it into committed files or frontend variables.
-3. **Cloudflare authorization:** Use a scoped Cloudflare API token granting Pages edit, D1 edit, and account read for the intended account if automation is available. Store `CLOUDFLARE_API_TOKEN` as a workspace secret, alongside a non-secret `CLOUDFLARE_ACCOUNT_ID`. Turnstile setup may need its own account permission or dashboard action. Do not enable a paid Workers plan.
+The initial deployment has no D1 binding and keeps AI disabled. The remaining prerequisites are the scoped Cloudflare API token and an unbilled Gemini API key. See [secure setup](SECURE-SETUP.md): the owner provides these through GitHub's encrypted repository secrets; the engineer handles migrations and code. No terminal commands or manual source changes are required from the owner.
 
 ## Engineering deployment steps
 
@@ -43,6 +37,6 @@ The engineer should do the configuration and commands once authorized. The owner
 
 No code switches to a paid model or service. The server rejects models outside the configured free allowlist and refuses corrections until `FREE_TIER_CONFIRMED=true`. This is an operator attestation, not a Google billing-status API check. Never enable paid billing. Cloudflare D1 and Functions have their own free quotas; failures are handled without bypassing enforcement.
 
-## Known limitation until installation
+## Remaining runtime configuration
 
-The Vite production build and Pages Functions compilation have succeeded in GitHub Actions. Deployment to the owner’s Cloudflare account is still pending. The DB binding is deliberately absent until a real free D1 database is provisioned; the API fails closed in the meantime. The generated dependency lockfile is committed and CI uses `npm ci`.
+The Vite production build and Pages Functions compilation have succeeded in GitHub Actions. The initial deployment to the owner’s Cloudflare account succeeded. The DB binding is deliberately absent until a real free D1 database is provisioned; the API fails closed in the meantime. The generated dependency lockfile is committed and CI uses `npm ci`.

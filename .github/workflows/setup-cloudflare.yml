@@ -1,0 +1,47 @@
+name: Set up Verba securely
+on:
+  workflow_dispatch:
+    inputs:
+      model:
+        description: Gemini model to verify (both are documented free-tier candidates)
+        type: choice
+        options:
+          - gemini-3.8-flash
+          - gemini-3.6-flash
+        default: gemini-3.8-flash
+      free_tier_confirmed:
+        description: I confirm this Gemini API project has no paid billing enabled
+        type: boolean
+        required: true
+        default: false
+permissions:
+  contents: read
+concurrency:
+  group: verba-account-setup
+  cancel-in-progress: false
+jobs:
+  configure:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: Verify free Gemini access and configure Cloudflare resources
+        env:
+          CLOUDFLARE_ACCOUNT_ID: c521e3f1a7e4896141c63556142e9d79
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          GEMINI_MODEL: ${{ inputs.model }}
+          FREE_TIER_CONFIRMED: ${{ inputs.free_tier_confirmed }}
+        run: node scripts/setup-cloudflare.ts
+      - uses: actions/upload-artifact@v4
+        with:
+          name: verba-setup-result
+          path: reports/setup/
+          retention-days: 7
