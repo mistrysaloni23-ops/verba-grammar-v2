@@ -12,8 +12,11 @@ const key = process.env.GEMINI_API_KEY;
 if (!account || !token || !key) throw new Error('Required credentials are missing.');
 const origin = 'https://verba-grammar-v2.pages.dev';
 const models = ['gemini-3.8-flash', 'gemini-3.6-flash'];
-const cap = 34;
-const thinkingLevel = 'low' as const;
+const cap = Number(process.env.EVAL_MAX_REQUESTS ?? '2');
+if (!Number.isSafeInteger(cap) || cap < 1 || cap > 34) throw new Error('Evaluation cap must be between 1 and 34.');
+const thinkingSetting = process.env.EVAL_THINKING_LEVEL ?? 'low';
+if (!['default','low','medium','high'].includes(thinkingSetting)) throw new Error('Invalid thinking setting.');
+const thinkingLevel = thinkingSetting === 'default' ? undefined : thinkingSetting as 'low'|'medium'|'high';
 let attempts = 0;
 const rows: Record<string, unknown>[] = [];
 const report: Record<string, unknown> = { startedAt: new Date().toISOString(), origin, cap, thinkingLevel, rows };
@@ -84,21 +87,42 @@ try {
   const categories = new Set<string>();
   const selected = cases.filter(item=>{if(categories.has(item.category))return false;categories.add(item.category);return true;});
   selected.push({id:'owner-example',category:'multiple_errors',mode:'natural',input:"I was trying to explain him about the problem but he didn't understood what I am saying and that's why the things got more complicated.",reference:"I tried to explain the problem to him, but he didn't understand what I was saying, which made things more complicated."});
-  for (const model of models) {
+  evaluation: for (const model of models) {
     for (const item of selected) {
       const started=performance.now();
       try {
-        const output=await generate(item.input,item.mode,key,model,reserve,fetch,undefined,thinkingLevel);
+        const quotaAwareFetch: typeof fetch = async (url, options) => {
+          const response = await fetch(url,options);
+          if(response.status===429) {
+            const payload: unknown=await response.clone().json().catch(()=>null);
+            const details=isRecord(payload)&&isRecord(payload.error)&&Array.isArray(payload.error.details)?payload.error.details:[];
+            const quota: Record<string,unknown>[]=[];
+            for(const detail of details) {
+              if(!isRecord(detail))continue;
+              if(Array.isArray(detail.violations))for(const entry of detail.violations) {
+                if(!isRecord(entry))continue;
+                const metric=typeof entry.quotaMetric==='string'&&/^generativelanguage\.googleapis\.com\/[A-Za-z0-9_]+$/.test(entry.quotaMetric)?entry.quotaMetric:undefined;
+                const limit=String(entry.quotaValue??'');
+                quota.push({metric,limit:/^\d+$/.test(limit)?limit:undefined});
+              }
+              if(typeof detail.retryDelay==='string'&&/^\d+(?:\.\d+)?s$/.test(detail.retryDelay))quota.push({retryDelay:detail.retryDelay});
+            }
+            report.providerQuota={model,details:quota};
+          }
+          return response;
+        };
+        const output=await generate(item.input,item.mode,key,model,reserve,quotaAwareFetch,undefined,thinkingLevel);
         rows.push({...item,model,output,latencyMs:Math.round(performance.now()-started),exactReferenceMatch:output===item.reference,unchanged:output===item.input});
         console.log(`${model}: ${item.id} completed`);
       } catch (error) {
         const code=error instanceof ApiError?error.code:'VERIFICATION_ERROR';
         rows.push({id:item.id,model,error:code,latencyMs:Math.round(performance.now()-started)});
         console.log(`${model}: ${item.id} ${code}`);
-        if (['QUOTA','API_KEY','MODEL_CONFIG'].includes(code)) break;
+        if (['QUOTA','API_KEY','MODEL_CONFIG'].includes(code)) { report.stopped=code; break evaluation; }
         if (['LIMIT','EVAL_LIMIT','VERIFICATION_ERROR'].includes(code)) throw error;
       }
       await save();
+      if(attempts>=cap){report.stopped='EVAL_CAP';break evaluation;}
       await new Promise(resolve=>setTimeout(resolve,16000));
     }
   }

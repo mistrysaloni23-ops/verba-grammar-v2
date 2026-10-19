@@ -1,0 +1,327 @@
+{
+  "startedAt": "2026-10-19T11:02:55.318Z",
+  "origin": "https://verba-grammar-v2.pages.dev",
+  "cap": 34,
+  "rows": [
+    {
+      "id": "basic-1",
+      "category": "basic",
+      "input": "She go to school every day.",
+      "reference": "She goes to school every day.",
+      "mode": "correct",
+      "unchanged": false,
+      "model": "gemini-3.8-flash",
+      "output": "She goes to school every day.",
+      "latencyMs": 7210,
+      "exactReferenceMatch": true
+    },
+    {
+      "id": "advanced-1",
+      "category": "advanced",
+      "input": "If I would have known, I would have called.",
+      "reference": "If I had known, I would have called.",
+      "mode": "correct",
+      "unchanged": false,
+      "model": "gemini-3.8-flash",
+      "output": "If I had known, I would have called.",
+      "latencyMs": 3519,
+      "exactReferenceMatch": true
+    },
+    {
+      "id": "multiple_errors-1",
+      "category": "multiple_errors",
+      "input": "She don't have a informations about project.",
+      "reference": "She doesn't have any information about the project.",
+      "mode": "correct",
+      "unchanged": false,
+      "model": "gemini-3.8-flash",
+      "output": "She doesn't have any information about the project.",
+      "latencyMs": 8676,
+      "exactReferenceMatch": true
+    },
+    {
+      "id": "articles-1",
+      "category": "articles",
+      "input": "He is a honest person.",
+      "reference": "He is an honest person.",
+      "mode": "correct",
+      "unchanged": false,
+      "model": "gemini-3.8-flash",
+      "output": "He is an honest person.",
+      "latencyMs": 3593,
+      "exactReferenceMatch": true
+    },
+    {
+      "id": "prepositions-1",
+      "category": "prepositions",
+      "input": "We discussed about the proposal.",
+      "reference": "We discussed the proposal.",
+      "mode": "correct",
+      "unchanged": false,
+      "model": "gemini-3.8-flash",
+      "output": "We discussed the proposal.",
+      "latencyMs": 5854,
+      "exactReferenceMatch": true
+    },
+    {
+      "id": "irregular_verbs-1",
+      "category": "irregular_verbs",
+      "input": "He has went home.",
+      "reference": "He has gone home.",
+      "mode": "correct",
+      "unchanged": false,
+      "model": "gemini-3.8-flash",
+      "output": "He has gone home.",
+      "latencyMs": 11956,
+      "exactReferenceMatch": true
+    },
+    {
+      "id": "natural-1",
+      "category": "natural",
+      "input": "I am writing this message for telling you that I cannot be able to attend tomorrow meeting.",
+      "reference": "I'm writing to let you know that I can't attend tomorrow's meeting.",
+      "mode": "natural",
+      "unchanged": false,
+      "model": "gemini-3.8-flash",
+      "output": "I'm writing to let you know that I can't attend tomorrow's meeting.",
+      "latencyMs": 2956,
+      "exactReferenceMatch": true
+    },
+    {
+      "id": "professional-1",
+      "category": "professional",
+      "input": "Please finds attached the report.",
+      "reference": "Please find the attached report.",
+      "mode": "correct",
+      "unchanged": false,
+      "model": "gemini-3.8-flash",
+      "output": "Please find attached the report.",
+      "latencyMs": 3182,
+      "exactReferenceMatch": false
+    },
+    {
+      "id": "casual-1",
+      "category": "casual",
+      "input": "Hey, how is things going?",
+      "reference": "Hey, how are things going?",
+      "mode": "correct",
+      "unchanged": false,
+      "model": "gemini-3.8-flash",
+      "output": "Hey, how are things going?",
+      "latencyMs": 4247,
+      "exactReferenceMatch": true
+    },
+    {
+      "id": "complex-1",
+      "category": "complex",
+      "input": "The book, which I borrowed it from the library, is fascinating.",
+      "reference": "The book, which I borrowed from the library, is fascinating.",
+      "mode": "correct",
+      "unchanged": false,
+      "model": "gemini-3.8-flash",
+      "output": "The book, which I borrowed from the library, is fascinating.",
+      "latencyMs": 7112,
+      "exactReferenceMatch": true
+    },
+    {
+      "id": "already_correct-1",
+      "category": "already_correct",
+      "input": "I enjoy reading on rainy afternoons.",
+      "reference": "I enjoy reading on rainy afternoons.",
+      "mode": "correct",
+      "unchanged": true,
+      "model": "gemini-3.8-flash",
+      "output": "I enjoy reading on rainy afternoons.",
+      "latencyMs": 10553,
+      "exactReferenceMatch": true
+    },
+    {
+      "id": "ambiguous-1",
+      "model": "gemini-3.8-flash",
+      "error": "TIMEOUT",
+      "latencyMs": 12110
+    },
+    {
+      "id": "meaning-1",
+      "category": "meaning",
+      "input": "Dr. Rao have not approved the 15 mg dose.",
+      "reference": "Dr. Rao has not approved the 15 mg dose.",
+      "mode": "correct",
+      "unchanged": false,
+      "model": "gemini-3.8-flash",
+      "output": "Dr. Rao has not approved the 15 mg dose.",
+      "latencyMs": 4074,
+      "exactReferenceMatch": true
+    },
+    {
+      "id": "paragraphs-1",
+      "category": "paragraphs",
+      "input": "I was trying to explain him about the problem but he didn't understood what I am saying and that's why the things got more complicated.",
+      "reference": "I was trying to explain the problem to him, but he didn't understand what I was saying, which made things more complicated.",
+      "mode": "correct",
+      "unchanged": false,
+      "model": "gemini-3.8-flash",
+      "output": "I was trying to explain the problem to him, but he didn't understand what I was saying, and that's why things got more complicated.",
+      "latencyMs": 5138,
+      "exactReferenceMatch": false
+    },
+    {
+      "id": "punctuation_spelling-1",
+      "model": "gemini-3.8-flash",
+      "error": "TIMEOUT",
+      "latencyMs": 12132
+    },
+    {
+      "id": "owner-example",
+      "model": "gemini-3.8-flash",
+      "error": "TIMEOUT",
+      "latencyMs": 12199
+    },
+    {
+      "id": "basic-1",
+      "model": "gemini-3.6-flash",
+      "error": "UNAVAILABLE",
+      "latencyMs": 7091
+    },
+    {
+      "id": "advanced-1",
+      "category": "advanced",
+      "input": "If I would have known, I would have called.",
+      "reference": "If I had known, I would have called.",
+      "mode": "correct",
+      "unchanged": false,
+      "model": "gemini-3.6-flash",
+      "output": "If I had known, I would have called.",
+      "latencyMs": 2360,
+      "exactReferenceMatch": true
+    },
+    {
+      "id": "multiple_errors-1",
+      "category": "multiple_errors",
+      "input": "She don't have a informations about project.",
+      "reference": "She doesn't have any information about the project.",
+      "mode": "correct",
+      "unchanged": false,
+      "model": "gemini-3.6-flash",
+      "output": "She doesn't have any information about the project.",
+      "latencyMs": 3973,
+      "exactReferenceMatch": true
+    },
+    {
+      "id": "articles-1",
+      "model": "gemini-3.6-flash",
+      "error": "TIMEOUT",
+      "latencyMs": 12138
+    },
+    {
+      "id": "prepositions-1",
+      "category": "prepositions",
+      "input": "We discussed about the proposal.",
+      "reference": "We discussed the proposal.",
+      "mode": "correct",
+      "unchanged": false,
+      "model": "gemini-3.6-flash",
+      "output": "We discussed the proposal.",
+      "latencyMs": 9332,
+      "exactReferenceMatch": true
+    },
+    {
+      "id": "irregular_verbs-1",
+      "category": "irregular_verbs",
+      "input": "He has went home.",
+      "reference": "He has gone home.",
+      "mode": "correct",
+      "unchanged": false,
+      "model": "gemini-3.6-flash",
+      "output": "{\"writing_to_edit\":\"He has gone home.\"}",
+      "latencyMs": 11650,
+      "exactReferenceMatch": false
+    },
+    {
+      "id": "natural-1",
+      "category": "natural",
+      "input": "I am writing this message for telling you that I cannot be able to attend tomorrow meeting.",
+      "reference": "I'm writing to let you know that I can't attend tomorrow's meeting.",
+      "mode": "natural",
+      "unchanged": false,
+      "model": "gemini-3.6-flash",
+      "output": "I'm writing to let you know that I can't attend tomorrow's meeting.",
+      "latencyMs": 4261,
+      "exactReferenceMatch": true
+    },
+    {
+      "id": "professional-1",
+      "category": "professional",
+      "input": "Please finds attached the report.",
+      "reference": "Please find the attached report.",
+      "mode": "correct",
+      "unchanged": false,
+      "model": "gemini-3.6-flash",
+      "output": "Please find attached the report.",
+      "latencyMs": 5475,
+      "exactReferenceMatch": false
+    },
+    {
+      "id": "casual-1",
+      "category": "casual",
+      "input": "Hey, how is things going?",
+      "reference": "Hey, how are things going?",
+      "mode": "correct",
+      "unchanged": false,
+      "model": "gemini-3.6-flash",
+      "output": "Hey, how are things going?",
+      "latencyMs": 10082,
+      "exactReferenceMatch": true
+    },
+    {
+      "id": "complex-1",
+      "category": "complex",
+      "input": "The book, which I borrowed it from the library, is fascinating.",
+      "reference": "The book, which I borrowed from the library, is fascinating.",
+      "mode": "correct",
+      "unchanged": false,
+      "model": "gemini-3.6-flash",
+      "output": "The book, which I borrowed from the library, is fascinating.",
+      "latencyMs": 8680,
+      "exactReferenceMatch": true
+    },
+    {
+      "id": "already_correct-1",
+      "category": "already_correct",
+      "input": "I enjoy reading on rainy afternoons.",
+      "reference": "I enjoy reading on rainy afternoons.",
+      "mode": "correct",
+      "unchanged": true,
+      "model": "gemini-3.6-flash",
+      "output": "I enjoy reading on rainy afternoons.",
+      "latencyMs": 3614,
+      "exactReferenceMatch": true
+    },
+    {
+      "id": "ambiguous-1",
+      "model": "gemini-3.6-flash",
+      "error": "LIMIT",
+      "latencyMs": 5537
+    }
+  ],
+  "freeTierConfirmed": true,
+  "production": {
+    "homepage": 200,
+    "ready": true,
+    "turnstileRequired": true,
+    "missingTokenRejected": true
+  },
+  "attempts": 30,
+  "failure": "LIMIT",
+  "phase": "Baseline: provider-default thinking; before echoed-wrapper rejection",
+  "workflow": "https://github.com/mistrysaloni23-ops/verba-grammar-v2/actions/runs/39241024812",
+  "review": {
+    "reviewer": "AI assistant; not independent human evaluation",
+    "notes": [
+      "Gemini 3.8 complete outputs preserve the reference meaning in the reviewed samples, including the name, 15 mg quantity and negation.",
+      "Both models leave the sampled already-correct sentence unchanged.",
+      "Gemini 3.6 irregular_verbs-1 incorrectly returns the input-envelope JSON format; this is now rejected by runtime validation.",
+      "The local LIMIT row was not sent to Gemini. Exact matches are diagnostic, not an accuracy score."
+    ]
+  }
+}
