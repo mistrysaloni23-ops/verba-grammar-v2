@@ -13,9 +13,10 @@ if (!account || !token || !key) throw new Error('Required credentials are missin
 const origin = 'https://verba-grammar-v2.pages.dev';
 const models = ['gemini-3.8-flash', 'gemini-3.6-flash'];
 const cap = 34;
+const thinkingLevel = 'low' as const;
 let attempts = 0;
 const rows: Record<string, unknown>[] = [];
-const report: Record<string, unknown> = { startedAt: new Date().toISOString(), origin, cap, rows };
+const report: Record<string, unknown> = { startedAt: new Date().toISOString(), origin, cap, thinkingLevel, rows };
 async function cf(path: string, body?: unknown): Promise<unknown> {
   const response = await fetch(`https://api.cloudflare.com/client/v4/accounts/${account}${path}`, {
     method: body ? 'POST' : 'GET', headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
@@ -50,14 +51,19 @@ try {
   const daily = positiveInt(value('DAILY_BUDGET'),100,10000);
   const perMinute = positiveInt(value('VISITOR_PER_MINUTE'),4,30);
   const visitor = `synthetic-evaluation:${process.env.GITHUB_RUN_ID ?? randomUUID()}`;
+  const reservationTimes: number[] = [];
   async function reserve() {
     if (attempts >= cap) throw new ApiError(429,'EVAL_LIMIT','Evaluation attempt cap reached');
+    const recent=reservationTimes.filter(time=>time>Date.now()-60000);
+    if(recent.length>=perMinute)await new Promise(resolve=>setTimeout(resolve,Math.max(0,recent[recent.length-perMinute]+60100-Date.now())));
     const now = Date.now(); const day = new Date(now).toISOString().slice(0,10);
     const result = await cf(`/d1/database/${database}/query`, {sql:RESERVE_SQL,params:[randomUUID(),day,visitor,now,day,daily,visitor,now-60000,perMinute]});
     assert.ok(Array.isArray(result) && isRecord(result[0]) && result[0].success === true && isRecord(result[0].meta));
     if (result[0].meta.changes !== 1) throw new ApiError(429,'LIMIT','Shared production usage limit reached');
-    attempts++;
+    attempts++; reservationTimes.push(Date.now());
   }
+  const usage = await cf(`/d1/database/${database}/query`, {sql:'SELECT COUNT(*) AS total FROM usage_reservations WHERE day = ?',params:[new Date().toISOString().slice(0,10)]});
+  report.usageBefore = usage; report.dailyBudget = daily; report.visitorPerMinute = perMinute;
   let config: unknown;
   for (let i=0;i<18;i++) {
     const response = await fetch(`${origin}/api/config`, {signal:AbortSignal.timeout(10000)});
@@ -82,7 +88,7 @@ try {
     for (const item of selected) {
       const started=performance.now();
       try {
-        const output=await generate(item.input,item.mode,key,model,reserve);
+        const output=await generate(item.input,item.mode,key,model,reserve,fetch,undefined,thinkingLevel);
         rows.push({...item,model,output,latencyMs:Math.round(performance.now()-started),exactReferenceMatch:output===item.reference,unchanged:output===item.input});
         console.log(`${model}: ${item.id} completed`);
       } catch (error) {
@@ -101,9 +107,12 @@ try {
     const percentile=(p:number)=>times.length?times[Math.ceil(times.length*p)-1]:null;
     return {model,evaluated:results.length,successful:times.length,p50Ms:percentile(.5),p95Ms:percentile(.95)};
   });
-  report.note='Real Gemini calls with synthetic writing, counted against the shared production budget. Model timings include D1 reservation and any retry. Reference matches are not accuracy scores. Browser corrections and human quality review are separate.';
+  report.note='Real Gemini calls with synthetic writing, counted against the shared production budget. Model timings include D1 reservation, any rate-limit cooldown and any retry. Reference matches are not accuracy scores. Browser corrections and human quality review are separate.';
   console.log(JSON.stringify(report.models));
 } catch (error) {
   report.failure=error instanceof ApiError?error.code:error instanceof Error?error.message:'UNKNOWN';
   throw error;
-} finally { await save(); }
+} finally {
+  report.models=models.map(model=>{const results=rows.filter(row=>row.model===model);const timings=results.filter(row=>typeof row.output==='string').map(row=>row.latencyMs as number).sort((a,b)=>a-b);return {model,evaluated:results.length,successful:timings.length,p50Ms:timings.length?timings[Math.ceil(timings.length*.5)-1]:null,p95Ms:timings.length?timings[Math.ceil(timings.length*.95)-1]:null};});
+  await save();
+}

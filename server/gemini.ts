@@ -38,6 +38,12 @@ export function extractText(data: unknown, inputLength: number): string {
   if (!output || output.length > Math.max(1000, inputLength * 4) || output.startsWith('```')) {
     return invalidResponse();
   }
+  if (output.startsWith('{')) {
+    try {
+      const wrapped: unknown = JSON.parse(output);
+      if (wrapped && typeof wrapped === 'object' && 'writing_to_edit' in wrapped) return invalidResponse();
+    } catch (error) { if (error instanceof ApiError) throw error; }
+  }
   return output;
 }
 
@@ -55,6 +61,7 @@ export async function generate(
   reserve: () => Promise<void>,
   fetcher: typeof fetch = fetch,
   signal?: AbortSignal,
+  thinkingLevel?: 'low' | 'medium' | 'high',
 ): Promise<string> {
   // Every outbound attempt consumes a reservation, including the single retry.
   for (let attempt = 0; attempt < 2; attempt++) {
@@ -77,7 +84,7 @@ export async function generate(
           body: JSON.stringify({
             systemInstruction: { parts: [{ text: PROMPTS[mode] }] },
             contents: [{ role: 'user', parts: [{ text: JSON.stringify({ writing_to_edit: text }) }] }],
-            generationConfig: { temperature: 0.15, maxOutputTokens: 4096 },
+            generationConfig: { temperature: 0.15, maxOutputTokens: 4096, ...(thinkingLevel ? { thinkingConfig: { thinkingLevel } } : {}) },
           }),
         },
       );

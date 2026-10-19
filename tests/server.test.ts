@@ -117,3 +117,16 @@ test('Turnstile provider HTTP failures fail closed',async()=>{
  const response=await handleCorrection(request({...valid,token:'abc'}),e,()=>{},(async()=>Response.json({success:true,hostname:'verba.example',action:'correct'},{status:503})) as typeof fetch);
  assert.equal(response.status,503);
 });
+
+test('rejects an echoed JSON input envelope instead of showing it as corrected English',()=>{
+ assert.throws(()=>extractText({candidates:[{finishReason:'STOP',content:{parts:[{text:'{"writing_to_edit":"He has gone home."}'}]}}]},30),{code:'INVALID_RESPONSE'});
+});
+test('passes validated server thinking level to Gemini and refuses unsupported settings',async()=>{
+ const e={...env(),GEMINI_THINKING_LEVEL:'low'};
+ let requested=false;
+ const result=await handleCorrection(request(valid),e,()=>{},(async(_url,options)=>{
+  assert.equal(JSON.parse(options!.body as string).generationConfig.thinkingConfig.thinkingLevel,'low');requested=true;return success();
+ }) as typeof fetch);
+ assert.equal(result.status,200);assert.equal(requested,true);
+ assert.equal(configured({...e,GEMINI_THINKING_LEVEL:'minimal'}),false);
+});

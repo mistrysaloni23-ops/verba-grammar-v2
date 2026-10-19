@@ -2,7 +2,7 @@ import { MAX_CHARS } from '../src/shared.ts';
 import { ApiError, generate } from './gemini.ts';
 import { positiveInt, reserve, visitorHash } from './limits.ts';
 export interface Env {
- GEMINI_API_KEY?: string; GEMINI_MODEL?: string; APPROVED_FREE_MODELS?: string; FREE_TIER_CONFIRMED?: string;
+ GEMINI_THINKING_LEVEL?: string; GEMINI_API_KEY?: string; GEMINI_MODEL?: string; APPROVED_FREE_MODELS?: string; FREE_TIER_CONFIRMED?: string;
  VISITOR_HASH_SECRET?: string; DAILY_BUDGET?: string; VISITOR_PER_MINUTE?: string; DB: D1Database;
  TURNSTILE_SECRET_KEY?: string; TURNSTILE_SITE_KEY?: string; REQUIRE_TURNSTILE?: string;
 }
@@ -10,7 +10,7 @@ export function json(data: unknown, status = 200, extra: Record<string,string> =
  return Response.json(data, { status, headers: { 'Cache-Control': 'no-store', 'X-Content-Type-Options': 'nosniff', ...extra } });
 }
 export function configured(env: Env) {
- return Boolean(env.GEMINI_API_KEY && env.GEMINI_MODEL && /^[a-z0-9.-]+$/.test(env.GEMINI_MODEL) && env.FREE_TIER_CONFIRMED === 'true' && env.APPROVED_FREE_MODELS?.split(',').map(x=>x.trim()).includes(env.GEMINI_MODEL) && env.VISITOR_HASH_SECRET && env.VISITOR_HASH_SECRET.length >= 32 && env.DB && (env.REQUIRE_TURNSTILE === 'false' || (env.TURNSTILE_SECRET_KEY && env.TURNSTILE_SITE_KEY)));
+ return Boolean((env.GEMINI_THINKING_LEVEL === undefined || ['low','medium','high'].includes(env.GEMINI_THINKING_LEVEL)) && env.GEMINI_API_KEY && env.GEMINI_MODEL && /^[a-z0-9.-]+$/.test(env.GEMINI_MODEL) && env.FREE_TIER_CONFIRMED === 'true' && env.APPROVED_FREE_MODELS?.split(',').map(x=>x.trim()).includes(env.GEMINI_MODEL) && env.VISITOR_HASH_SECRET && env.VISITOR_HASH_SECRET.length >= 32 && env.DB && (env.REQUIRE_TURNSTILE === 'false' || (env.TURNSTILE_SECRET_KEY && env.TURNSTILE_SITE_KEY)));
 }
 async function readBody(request: Request) {
  if (!request.headers.get('content-type')?.startsWith('application/json')) throw new ApiError(415, 'INPUT', 'Please send text in the supported format.');
@@ -43,7 +43,7 @@ export async function handleCorrection(request: Request, env: Env, waitUntil: (p
   const now = Date.now(); const day = new Date(now).toISOString().slice(0,10);
   const visitor = await visitorHash(ip,env.VISITOR_HASH_SECRET!,day);
   const daily = positiveInt(env.DAILY_BUDGET,100,10000); const perMinute=positiveInt(env.VISITOR_PER_MINUTE,4,30);
-  const result = await generate(text,body.mode,env.GEMINI_API_KEY!,env.GEMINI_MODEL!,()=>reserve(env.DB,visitor,daily,perMinute),fetcher,request.signal);
+  const result = await generate(text,body.mode,env.GEMINI_API_KEY!,env.GEMINI_MODEL!,()=>reserve(env.DB,visitor,daily,perMinute),fetcher,request.signal,env.GEMINI_THINKING_LEVEL as 'low'|'medium'|'high'|undefined);
   waitUntil(env.DB.prepare('DELETE FROM usage_reservations WHERE day < ?').bind(day).run().catch(()=>{}));
   return json({text:result,elapsedMs:Date.now()-now});
  } catch(e) {
