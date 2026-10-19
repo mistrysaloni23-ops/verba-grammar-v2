@@ -1,0 +1,16 @@
+name = "verba-grammar-v2"
+pages_build_output_dir = "dist"
+compatibility_date = "2025-10-01"
+
+[vars]
+DAILY_BUDGET = "100"
+VISITOR_PER_MINUTE = "4"
+REQUIRE_TURNSTILE = "true"
+FREE_TIER_CONFIRMED = "false"
+# Model and free-tier allowlist intentionally unset until documentation and account eligibility are verified.
+
+[[d1_databases]]
+binding = "DB"
+database_name = "verba-usage"
+database_id = "00000000-0000-0000-0000-000000000000"
+migrations_dir = "migrations"
