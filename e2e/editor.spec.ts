@@ -55,3 +55,14 @@ test('input length, theme, privacy and responsive layout',async({page})=>{
  expect(await page.evaluate(()=>document.documentElement.scrollWidth<=window.innerWidth)).toBe(true);
 });
 test('example and character/word counts',async({page})=>{await page.getByRole('checkbox').uncheck();await page.getByRole('button',{name:'Try an example'}).click();await expect(page.getByRole('textbox')).not.toHaveValue('');await expect(page.locator('.original .panel-footer')).toContainText('words');});
+
+test('capture light and dark editor layouts for visual review',async({page},testInfo)=>{
+ await page.getByRole('checkbox').uncheck();
+ await page.screenshot({path:testInfo.outputPath('editor-light.png'),fullPage:true});
+ await page.getByRole('button',{name:'Use dark theme'}).click();
+ await page.getByRole('textbox').fill("She don't know.");
+ await page.getByRole('button',{name:'Correct English',exact:true}).last().click();
+ await expect(page.locator('.result-text')).toHaveText("She doesn't know.");
+ await page.getByRole('button',{name:'Compare changes'}).click();
+ await page.screenshot({path:testInfo.outputPath('editor-dark.png'),fullPage:true});
+});

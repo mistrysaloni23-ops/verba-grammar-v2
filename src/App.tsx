@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { ArrowRight, Check, CheckCheck, ChevronDown, Copy, Feather, Fingerprint, GitCompareArrows, LoaderCircle, Moon, RotateCcw, RotateCw, ShieldCheck, Sparkles, Sun, Trash2, WandSparkles, X } from 'lucide-react';
 import { diffWordsWithSpace } from 'diff';
-import { example, MAX_CHARS, wordCount } from './shared.ts';
+import { example, MAX_CHARS, wordCount, isRecord } from './shared.ts';
 import { useEditor, type Config } from './useEditor.ts';
 import { Turnstile, type ChallengeHandle } from './Turnstile.tsx';
 function Privacy({close}:{close:()=>void}){
@@ -15,7 +15,7 @@ export default function App(){
  const e=useEditor(getToken,config);const [comparison,setComparison]=useState(false);const [copied,setCopied]=useState(false);const [copyError,setCopyError]=useState('');const [privacy,setPrivacy]=useState(false);
  const [dark,setDark]=useState(()=>{try{return localStorage.getItem('verba-theme')==='dark'||(!localStorage.getItem('verba-theme')&&matchMedia('(prefers-color-scheme: dark)').matches);}catch{return false;}});
  useEffect(()=>{document.documentElement.dataset.theme=dark?'dark':'light';try{localStorage.setItem('verba-theme',dark?'dark':'light');}catch{}},[dark]);
- useEffect(()=>{const c=new AbortController();fetch('/api/config',{signal:AbortSignal.any([c.signal,AbortSignal.timeout(10000)])}).then(r=>{if(!r.ok)throw new Error();return r.json();}).then(d=>{if(typeof d?.ready!=='boolean'||typeof d.requireTurnstile!=='boolean'||(d.siteKey!==null&&typeof d.siteKey!=='string'))throw new Error();setConfig(d);}).catch(()=>{if(!c.signal.aborted)setConfigFailed(true);});return()=>c.abort();},[]);
+ useEffect(()=>{const c=new AbortController();fetch('/api/config',{signal:AbortSignal.any([c.signal,AbortSignal.timeout(10000)])}).then(r=>{if(!r.ok)throw new Error();return r.json();}).then(d=>{if(!isRecord(d)||typeof d.ready!=='boolean'||typeof d.requireTurnstile!=='boolean'||(d.siteKey!==null&&typeof d.siteKey!=='string'))throw new Error();setConfig({ready:d.ready,requireTurnstile:d.requireTurnstile,siteKey:d.siteKey});}).catch(()=>{if(!c.signal.aborted)setConfigFailed(true);});return()=>c.abort();},[]);
  useEffect(()=>{setCopied(false);setCopyError('');},[e.result]);
  const copy=async()=>{try{await navigator.clipboard.writeText(e.result!.text);setCopied(true);setCopyError('');}catch{setCopyError('Copy is unavailable. Select the corrected text to copy it.');}};
  const overLimit=e.text.length>MAX_CHARS;

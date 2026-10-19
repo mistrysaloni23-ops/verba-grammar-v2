@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { cacheKey, DEBOUNCE_MS, MAX_CHARS, type Mode, type Correction } from './shared.ts';
+import { cacheKey, DEBOUNCE_MS, MAX_CHARS, isRecord, type Mode, type Correction } from './shared.ts';
 export type Config = { ready: boolean; siteKey: string | null; requireTurnstile: boolean };
 export function useEditor(getToken: () => Promise<string>, config: Config | null) {
  const [history,setHistory]=useState(['']); const [position,setPosition]=useState(0);
@@ -26,8 +26,8 @@ export function useEditor(getToken: () => Promise<string>, config: Config | null
    if(id!==revision.current)return;
    const response=await fetch('/api/correct',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({text,mode,token}),signal:controller.signal});
    const data=await response.json().catch(()=>null);
-   if(!response.ok)throw new Error(typeof data?.error==='string'?data.error:'The editor is unavailable. Please try again.');
-   if(typeof data?.text!=='string'||!data.text.trim())throw new Error('The editor returned an unexpected response. Please try again.');
+   if(!response.ok)throw new Error(isRecord(data)&&typeof data.error==='string'?data.error:'The editor is unavailable. Please try again.');
+   if(!isRecord(data)||typeof data.text!=='string'||!data.text.trim())throw new Error('The editor returned an unexpected response. Please try again.');
    if(id!==revision.current)return;
    const correction={source:text,mode,text:data.text,elapsedMs:typeof data.elapsedMs==='number'?data.elapsedMs:0};cache.current=correction;setResult(correction);
   } catch(e){if(id===revision.current)setError(controller.signal.aborted?'The request timed out. Please try again.':e instanceof Error?e.message:'Could not connect. Check your connection and try again.');}
