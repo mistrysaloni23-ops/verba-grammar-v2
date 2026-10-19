@@ -9,8 +9,5 @@ REQUIRE_TURNSTILE = "true"
 FREE_TIER_CONFIRMED = "false"
 # Model and free-tier allowlist intentionally unset until documentation and account eligibility are verified.
 
-[[d1_databases]]
-binding = "DB"
-database_name = "verba-usage"
-database_id = "00000000-0000-0000-0000-000000000000"
-migrations_dir = "migrations"
+# Add the real DB binding after the free D1 database is provisioned.
+# Corrections fail closed while DB is absent; there is no quota bypass.

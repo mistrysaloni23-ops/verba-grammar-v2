@@ -2,7 +2,7 @@
 
 ## Current status
 
-No Cloudflare account/API token, Gemini API key, D1 database, Turnstile widget, or verified model was provided in this session. The owner created the repository and installed the ChatGPT Codex Connector. Source publication to `mistrysaloni23-ops/verba-grammar-v2` is verified; GitHub Actions can install dependencies and execute checks. The local CLI/network remains unavailable. Do not deploy with the placeholder D1 ID.
+No Cloudflare account/API token, Gemini API key, D1 database, Turnstile widget, or verified model was provided in this session. The owner created the repository and installed the ChatGPT Codex Connector. Source publication to `mistrysaloni23-ops/verba-grammar-v2` is verified; GitHub Actions can install dependencies and execute checks. The local CLI/network remains unavailable. The initial deployment has no D1 binding and keeps AI disabled. Add the real DB binding before enabling corrections.
 
 ## Owner actions that require account access
 
@@ -15,7 +15,7 @@ The engineer should do the configuration and commands once authorized. The owner
 ## Engineering deployment steps
 
 1. Use the committed lockfile and `npm ci`; the GitHub Actions runner is available even while the local proxy is down. Run all checks and desktop/mobile tests. Current official Gemini model, pricing and terms pages have been retrieved; see `docs/MODELS.md`. Confirm the selected model exists and is available on the owner's free project. Run live evaluations before selecting a production model.
-2. Create a free D1 database named `verba-usage` (`wrangler d1 create verba-usage`). Replace `database_id` in `wrangler.toml` with its returned ID. Apply `wrangler d1 migrations apply verba-usage --remote`. This schema contains only quota reservations.
+2. Create a free D1 database named `verba-usage` (`wrangler d1 create verba-usage`). Add a `[[d1_databases]]` block to `wrangler.toml` with binding `DB`, database name `verba-usage`, its returned database ID, and migrations directory `migrations`. The engineer will make this code change. Apply `wrangler d1 migrations apply verba-usage --remote`. This schema contains only quota reservations.
 3. Create a Turnstile widget in **Cloudflare → Turnstile → Add widget**. Add the production `pages.dev` hostname and any chosen custom hostname. Managed mode is appropriate. Configure site key and encrypted secret key. Preview hosts need their own allowed host configuration; otherwise keep preview corrections disabled.
 4. In **Cloudflare → Workers & Pages → Create application → Pages → Connect to Git** (labels may appear as “Import an existing Git repository”), authorize GitHub and select `verba-grammar-v2`. Production branch: `main`. Build command: `npm run build`. Output directory: `dist`. Node version: `24`. Cloudflare recognizes the root `functions/` directory. Select the free plan.
 5. Configure production runtime values. Keep secrets encrypted:
@@ -45,4 +45,4 @@ No code switches to a paid model or service. The server rejects models outside t
 
 ## Known limitation until installation
 
-The Vite production build and Pages Functions compilation have succeeded in GitHub Actions. Deployment to the owner’s Cloudflare account is still pending. The D1 ID is deliberately a visible placeholder, not a fabricated working database. The generated dependency lockfile is committed and CI uses `npm ci`.
+The Vite production build and Pages Functions compilation have succeeded in GitHub Actions. Deployment to the owner’s Cloudflare account is still pending. The DB binding is deliberately absent until a real free D1 database is provisioned; the API fails closed in the meantime. The generated dependency lockfile is committed and CI uses `npm ci`.
