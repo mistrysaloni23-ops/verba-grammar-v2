@@ -11,7 +11,9 @@
     "check": "npm test && npm run build",
     "pages:dev": "wrangler pages dev dist",
     "pages:build": "wrangler pages functions build functions --outdir .pages-functions",
-    "eval:live": "node --experimental-strip-types scripts/evaluate.ts"
+    "eval:live": "node --experimental-strip-types scripts/evaluate.ts",
+    "preview": "vite preview --host 0.0.0.0",
+    "test:pages": "node scripts/pages-smoke.ts"
   },
   "dependencies": {
     "react": "^19.1.0",

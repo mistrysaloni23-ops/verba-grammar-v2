@@ -14,7 +14,9 @@ test('manual correction, unchanged cache, copy, comparison, clear and undo/redo'
  await page.getByRole('button',{name:'Copy',exact:true}).click();
  await expect(page.getByRole('button',{name:'Copied',exact:true})).toBeVisible();
  expect(await page.evaluate(()=>navigator.clipboard.readText())).toBe("She doesn't know.");
- await page.getByRole('button',{name:'Compare changes'}).click();await expect(page.locator('.comparison ins')).toContainText("doesn't");
+ await page.getByRole('button',{name:'Compare changes'}).click();await expect(page.locator('.comparison p ins')).toHaveCount(1);
+ const comparedResult=await page.locator('.comparison p').evaluate(element=>{const copy=element.cloneNode(true) as HTMLElement;copy.querySelectorAll('del').forEach(node=>node.remove());return copy.textContent;});
+ expect(comparedResult).toBe("She doesn't know.");
  await page.getByRole('button',{name:'Correct English',exact:true}).last().click();expect(requests).toBe(1);
  await page.getByRole('button',{name:'Clear text'}).click();await expect(page.getByRole('textbox')).toHaveValue('');
  await page.getByRole('button',{name:'Undo',exact:true}).click();await expect(page.getByRole('textbox')).toHaveValue("She don't know.");

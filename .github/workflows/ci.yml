@@ -20,6 +20,8 @@ jobs:
         run: npm run check
       - name: Compile Cloudflare Pages Functions
         run: npm run pages:build
+      - name: Smoke-test local Cloudflare Pages runtime
+        run: npm run test:pages
       - name: Install browser
         run: npx playwright install --with-deps chromium
       - name: Desktop and mobile tests (mocked Gemini)
