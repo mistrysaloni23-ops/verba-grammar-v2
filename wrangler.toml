@@ -2,12 +2,15 @@ name = "verba-grammar-v2"
 pages_build_output_dir = "dist"
 compatibility_date = "2025-10-01"
 
-[vars]
-DAILY_BUDGET = "100"
-VISITOR_PER_MINUTE = "4"
-REQUIRE_TURNSTILE = "true"
-FREE_TIER_CONFIRMED = "false"
-# Model and free-tier allowlist intentionally unset until documentation and account eligibility are verified.
+# Runtime settings and encrypted secrets are managed in Cloudflare.
+# The setup workflow requires an unbilled-project attestation.
 
-# Add the real DB binding after the free D1 database is provisioned.
-# Corrections fail closed while DB is absent; there is no quota bypass.
+[[d1_databases]]
+binding = "DB"
+database_name = "verba-usage"
+database_id = "466a9daf-d3ed-4108-8f6f-a6044ff92f6a"
+migrations_dir = "migrations"
+
+# Preview deployments must never share the production quota database.
+[env.preview]
+d1_databases = []

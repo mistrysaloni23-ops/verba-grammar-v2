@@ -1,0 +1,38 @@
+name: Verify live Verba
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - .github/workflows/live-verification.yml
+      - scripts/verify-live.ts
+permissions:
+  contents: read
+concurrency:
+  group: verba-live-evaluation
+  cancel-in-progress: false
+jobs:
+  verify:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: Check production and compare approved models within shared limits
+        env:
+          CLOUDFLARE_ACCOUNT_ID: c521e3f1a7e4896141c63556142e9d79
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: node scripts/verify-live.ts
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: live-verification
+          path: reports/live/
+          retention-days: 7
