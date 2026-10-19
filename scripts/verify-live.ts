@@ -103,7 +103,8 @@ try {
                 if(!isRecord(entry))continue;
                 const metric=typeof entry.quotaMetric==='string'&&/^generativelanguage\.googleapis\.com\/[A-Za-z0-9_]+$/.test(entry.quotaMetric)?entry.quotaMetric:undefined;
                 const limit=String(entry.quotaValue??'');
-                quota.push({metric,limit:/^\d+$/.test(limit)?limit:undefined});
+                const quotaId=typeof entry.quotaId==='string'&&/^Generate[A-Za-z0-9_-]{1,120}$/.test(entry.quotaId)?entry.quotaId:undefined;
+                quota.push({metric,quotaId,limit:/^\d+$/.test(limit)?limit:undefined});
               }
               if(typeof detail.retryDelay==='string'&&/^\d+(?:\.\d+)?s$/.test(detail.retryDelay))quota.push({retryDelay:detail.retryDelay});
             }
