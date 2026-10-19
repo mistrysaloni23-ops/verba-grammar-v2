@@ -88,7 +88,7 @@ async function setup() {
       name: projectName, domains: [productionHost], mode: 'managed',
     });
   }
-  if (!isRecord(widget) || typeof widget.sitekey !== 'string' || typeof widget.secret_key !== 'string') {
+  if (!isRecord(widget) || typeof widget.sitekey !== 'string' || typeof widget.secret !== 'string') {
     throw new Error('Turnstile did not return the widget keys. Setup stopped without rotating keys.');
   }
   console.log('Turnstile protection is ready for the production hostname.');
@@ -119,7 +119,7 @@ async function setup() {
           // The owner attested to an unbilled project before this workflow could run.
           FREE_TIER_CONFIRMED: variable('true'),
           VISITOR_HASH_SECRET: secret(randomBytes(32).toString('hex')),
-          TURNSTILE_SECRET_KEY: secret(widget.secret_key),
+          TURNSTILE_SECRET_KEY: secret(widget.secret),
           TURNSTILE_SITE_KEY: variable(widget.sitekey),
           DAILY_BUDGET: variable('100'),
           VISITOR_PER_MINUTE: variable('4'),
