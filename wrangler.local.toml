@@ -2,7 +2,8 @@ name = "verba-grammar-v2"
 pages_build_output_dir = "dist"
 compatibility_date = "2025-10-01"
 
-# Runtime settings and encrypted secrets are managed in Cloudflare.
+# Local development only; invoke Wrangler with --config wrangler.local.toml.
+# Production settings and encrypted secrets are managed in Cloudflare.
 # The setup workflow requires an unbilled-project attestation.
 
 [[d1_databases]]

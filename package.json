@@ -9,7 +9,7 @@
     "test": "node --experimental-strip-types --test tests/*.test.ts",
     "test:e2e": "playwright test",
     "check": "npm test && npm run build",
-    "pages:dev": "wrangler pages dev dist",
+    "pages:dev": "wrangler pages dev dist --config wrangler.local.toml",
     "pages:build": "wrangler pages functions build functions --outdir .pages-functions",
     "eval:live": "node --experimental-strip-types scripts/evaluate.ts",
     "preview": "vite preview --host 0.0.0.0",

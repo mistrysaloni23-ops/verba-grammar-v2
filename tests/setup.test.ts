@@ -62,7 +62,7 @@ test('account setup uses encrypted production secrets and emits only nonsecret a
   try {
     assert.equal(run.status, 0, run.stderr);
     const report = readFileSync(join(directory,'reports/setup/result.json'),'utf8');
-    const config = readFileSync(join(directory,'reports/setup/wrangler.toml'),'utf8');
+    const config = readFileSync(join(directory,'reports/setup/wrangler.local.toml'),'utf8');
     assert.doesNotMatch(report + config + run.stdout + run.stderr, /private-(token|gemini|turnstile)-fixture/);
     assert.match(config, /database_id = "12345678-1234-1234-1234-123456789abc"/);
     assert.equal(JSON.parse(report).smoke.attempts, 1);

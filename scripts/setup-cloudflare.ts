@@ -131,15 +131,15 @@ async function setup() {
   });
 
   await mkdir('reports/setup', { recursive: true });
-  const config = `name = "${projectName}"\npages_build_output_dir = "dist"\ncompatibility_date = "2025-10-01"\n\n# Runtime settings and encrypted secrets are managed in Cloudflare.\n# The setup workflow requires an unbilled-project attestation.\n\n[[d1_databases]]\nbinding = "DB"\ndatabase_name = "verba-usage"\ndatabase_id = "${database.uuid}"\nmigrations_dir = "migrations"\n`;
-  await writeFile('reports/setup/wrangler.toml', config);
+  const config = `name = "${projectName}"\npages_build_output_dir = "dist"\ncompatibility_date = "2025-10-01"\n\n# Local development only. Production settings and encrypted secrets are managed in Cloudflare.\n# The setup workflow requires an unbilled-project attestation.\n\n[[d1_databases]]\nbinding = "DB"\ndatabase_name = "verba-usage"\ndatabase_id = "${database.uuid}"\nmigrations_dir = "migrations"\n`;
+  await writeFile('reports/setup/wrangler.local.toml', config);
   await writeFile('reports/setup/result.json', JSON.stringify({
     project: projectName, website: `https://${productionHost}`, databaseId: database.uuid,
     selectedModel: model, setupCompletedAt: new Date().toISOString(),
     smoke: { input: sample, corrected, attempts, elapsedMs: geminiElapsedMs, note: 'Synthetic writing; not an accuracy score. Time covers Gemini attempts and any retry delay only.' },
-    state: 'Secrets configured; final source binding, deployment and live verification remain required.',
+    state: 'Secrets configured; redeployment and live verification remain required.',
   }, null, 2));
-  console.log('Encrypted production secrets configured. Download the nonsecret setup artifact for the final DB binding. Final deployment and verification remain required.');
+  console.log('Encrypted production secrets configured. The nonsecret setup artifact includes the local development DB binding. Final deployment and verification remain required.');
 }
 
 await setup();

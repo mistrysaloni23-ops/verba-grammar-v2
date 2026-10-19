@@ -23,13 +23,13 @@ The workflow has read-only GitHub permissions. It:
 2. Makes at most two selected-model API attempts with one synthetic grammar example, including a possible 503 retry.
 3. Creates/reuses the dedicated `verba-usage` D1 database and applies only the idempotent usage schema.
 4. Creates/reuses the dedicated production Turnstile widget. It does not rotate existing Turnstile keys or change unrelated widgets.
-5. Stores Gemini, visitor hashing and Turnstile secrets as encrypted `secret_text` Cloudflare production variables. It sets the production free-tier attestation only after the owner confirms an unbilled project and the selected model responds. The current source configuration still requires the final DB binding and redeployment.
+5. Stores Gemini, visitor hashing and Turnstile secrets as encrypted `secret_text` Cloudflare production variables. It sets the production free-tier attestation only after the owner confirms an unbilled project and the selected model responds. A new Pages deployment applies the production settings.
 6. Produces a nonsecret artifact with the real D1 configuration and synthetic smoke result. No credentials are included.
 
 It never calls billing endpoints, deletes resources, creates a new Pages project, or configures preview AI. It stops if unrelated project secrets or a conflicting DB binding would be overwritten. A repeated successful setup rotates only the application's visitor hash; the shared daily budget remains in the same D1 database.
 
 ## Engineer completion
 
-Read the returned smoke result, commit the artifact's real `wrangler.toml` binding, and verify the new native Pages deployment. The workflow already stores the owner’s free-tier attestation in production; the generated configuration removes the initial disabled placeholder variables. Configure/verify the production Turnstile widget, evaluate both modes live, and complete the capped model comparison. Delete the one-time Cloudflare repository secret after setup if no further authorized provisioning is needed; native Cloudflare Git deployments do not require that repository secret.
+Read the returned smoke result and trigger a new native Pages deployment. Production bindings and runtime variables are managed in Cloudflare, so there is deliberately no root `wrangler.toml` to override them. The artifact's `wrangler.local.toml` is for local development only. The workflow stores the owner’s free-tier attestation in production. Configure/verify the production Turnstile widget, evaluate both modes live, and complete the capped model comparison. Delete the one-time Cloudflare repository secret after setup if no further authorized provisioning is needed; native Cloudflare Git deployments do not require that repository secret.
 
 The setup workflow itself is prepared but has not been run against the owner's account. No live Gemini quality or latency statistics are available yet.
