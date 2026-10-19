@@ -1,25 +1,30 @@
 # Model selection and live evaluation
 
-## Evidence status — 18 October 2026
+## Verified documentation — 19 October 2026
 
-The owner requested evaluation of `gemini-3.8-flash` and `gemini-3.6-flash`. This session could not retrieve current official Gemini documentation: HTTPS requests failed at the workspace proxy before reaching Google. No Google API credentials are configured. Therefore neither name's existence, availability, free-tier eligibility, quality, latency, or reliability is verified. Do not assume these are valid model IDs.
+Official model, pricing, thinking and data-use pages were retrieved in English by [the documentation workflow](https://github.com/mistrysaloni23-ops/verba-grammar-v2/actions/runs/39208438885). The complete source pages and retrieval timestamps are saved as a workflow artifact. The workspace proxy remains unavailable, but GitHub Actions could retrieve the official sources.
 
-| Candidate | Documented existence | Free-tier eligibility | Live quality | Live latency | Decision |
-| --- | --- | --- | --- | --- | --- |
-| `gemini-3.8-flash` | Unverified | Unverified | Not run | Not measured | Blocked pending evidence |
-| `gemini-3.6-flash` | Unverified | Unverified | Not run | Not measured | Blocked pending evidence |
+| Candidate | Official status | Standard free-tier text pricing | English-editing quality | Actual latency/reliability |
+| --- | --- | --- | --- | --- |
+| `gemini-3.8-flash` | Stable; updated September 2026; described as Google's most intelligent Flash model | Input and output, including thinking tokens: free of charge | Not yet tested live | Not yet measured |
+| `gemini-3.6-flash` | Stable; updated July 2026; described as the previous generation balancing speed and capability | Input and output, including thinking tokens: free of charge | Not yet tested live | Not yet measured |
 
-The app intentionally has no default model. Selecting a different documented free-tier model requires recording the official evidence and live evaluation, rather than guessing a successor or claiming the requested names work.
+Both requested names are valid documented model IDs. Both support text output, a 1,048,576-token input context, and up to 65,536 output tokens. These are provider specifications, not measurements from Verba. Free-tier availability and actual quotas for the owner's project still need an authenticated check.
 
-## Official sources to verify
+The quality-first candidate is **gemini-3.8-flash**, with **gemini-3.6-flash** as the comparison candidate. This is provisional based on Google's model descriptions; it is not an assertion that 3.8 produces better corrections or meets the latency target. No automatic fallback is implemented, and production AI stays disabled until the selected model and unbilled project are configured.
 
-- Model catalog: https://ai.google.dev/gemini-api/docs/models
-- Pricing and free-tier eligibility: https://ai.google.dev/gemini-api/docs/pricing
-- Account rate limits: https://ai.google.dev/gemini-api/docs/rate-limits
-- GenerateContent API: https://ai.google.dev/api/generate-content
-- Data-use terms: https://ai.google.dev/gemini-api/terms
+Google documents `low`, `medium`, and `high` thinking for 3.8; `minimal` is explicitly unsupported and returns an error. The thinking guide lists 3.6 as also supporting `minimal`. Both currently default to medium. Verba currently leaves thinking at the model default; any tuning should be measured for accuracy as well as speed. Structured output support is documented for both models, but Verba uses validated plain text until structured behavior is tested live.
 
-These links are references to check, not claims that their contents were retrieved in this session. Once reachable, record retrieval date and exact model IDs; compare the account's actual available models using the authenticated model-list API. A listed model may still have no free quota for the specific account or region.
+## Official sources retrieved
+
+- [Model catalog](https://ai.google.dev/gemini-api/docs/models?hl=en)
+- [Gemini 3.8 Flash](https://ai.google.dev/gemini-api/docs/models/gemini-3.8-flash?hl=en)
+- [Gemini 3.6 Flash](https://ai.google.dev/gemini-api/docs/models/gemini-3.6-flash?hl=en)
+- [Pricing](https://ai.google.dev/gemini-api/docs/pricing?hl=en)
+- [Thinking](https://ai.google.dev/gemini-api/docs/thinking?hl=en)
+- [Data-use terms](https://ai.google.dev/gemini-api/terms?hl=en)
+
+The standard free-tier pricing table marks both input and output as free and marks product-improvement use as **Yes**. The terms explicitly describe human review of unpaid API inputs/outputs and warn against submitting sensitive, confidential or personal information. The UI reflects this. The terms provide a regional exception for the EEA, Switzerland and UK. The owner still needs to confirm project billing status and regional availability; Verba cannot infer these from public pricing.
 
 ## Evaluation protocol
 

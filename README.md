@@ -2,7 +2,7 @@
 
 A React + TypeScript + Vite English editor with Google Gemini behind Cloudflare Pages Functions. The app implements minimal correction and natural rewriting, idle correction, mode-aware in-memory caching, cancellation, comparison, copy, clear, history, responsive layouts, and dark/light themes.
 
-**Status:** implemented locally; 53 server tests pass. Dependency installation, TypeScript/Vite/Pages builds, browser execution, GitHub publication, Cloudflare deployment, and live Gemini evaluation remain unverified because this session's network proxy is unavailable and deployment credentials are not configured. No public deployment exists. See [verification report](docs/VERIFICATION.md).
+**Status:** [source published on GitHub](https://github.com/mistrysaloni23-ops/verba-grammar-v2); 53 server tests pass. Source is published on GitHub. Dependency installation, TypeScript checking, Vite production build and Pages Functions compilation have succeeded in GitHub Actions. **18 desktop/mobile browser tests and the local Pages runtime smoke test pass.** See the [successful CI run](https://github.com/mistrysaloni23-ops/verba-grammar-v2/actions/runs/39208761531). Cloudflare deployment and live Gemini evaluation still require account configuration. No public deployment exists. See [verification report](docs/VERIFICATION.md).
 
 ## Architecture
 
@@ -18,9 +18,9 @@ A React + TypeScript + Vite English editor with Google Gemini behind Cloudflare 
 
 ## Local engineering workflow
 
-Use Node 24. Install with `npm install`, run `npm run check`, then `npm run pages:build` and `npm run test:e2e`. Install Chromium with `npx playwright install chromium` before browser tests. Once dependencies can be downloaded, commit the generated lockfile and change CI's install step to `npm ci`.
+Use Node 24. Install with `npm ci`, run `npm run check`, then `npm run pages:build` and `npm run test:e2e`. Install Chromium with `npx playwright install chromium` before browser tests. The dependency lockfile is committed and CI uses `npm ci`.
 
-`npm run dev` serves the UI and forwards `/api` to `http://127.0.0.1:8788`. For a local backend, build first, copy `.env.example` to ignored `.dev.vars`, configure server values, apply the D1 migration locally, then run `npm run pages:dev`. Live local corrections require trustworthy visitor metadata; production expects Cloudflare's `CF-Connecting-IP`. Browser tests intercept API calls and never require real secrets.
+`npm run dev` serves the UI and forwards `/api` to `http://127.0.0.1:8788`. For a local backend, build first, copy `.env.example` to ignored `.dev.vars`, configure server values, apply the D1 migration locally, then run `npm run pages:dev`. Live local corrections require trustworthy visitor metadata; production expects Cloudflare's `CF-Connecting-IP`. `npm run test:pages` starts a local Pages runtime and verifies that missing configuration fails safely, without a live API call. Browser tests intercept API calls and never require real secrets.
 
 The API remains unavailable until all required configuration is present. It never pretends a mocked or failed response is a live correction. No model name is guessed or silently substituted.
 
