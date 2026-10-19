@@ -1,0 +1,25 @@
+name: Check official Gemini documentation
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - scripts/check-model-docs.ts
+      - .github/workflows/model-docs.yml
+permissions:
+  contents: read
+jobs:
+  documentation:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: Read official model, pricing and data-use documentation
+        run: node scripts/check-model-docs.ts
+      - uses: actions/upload-artifact@v4
+        with:
+          name: official-gemini-documentation
+          path: reports/model-docs/

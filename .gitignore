@@ -9,3 +9,5 @@ dist/
 playwright-report/
 test-results/
 reports/live-*
+
+reports/model-docs/
