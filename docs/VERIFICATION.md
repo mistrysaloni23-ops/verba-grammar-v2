@@ -2,12 +2,12 @@
 
 ## Successful GitHub Actions run
 
-[Verify Verba — run 39208761531](https://github.com/mistrysaloni23-ops/verba-grammar-v2/actions/runs/39208761531) completed successfully for source commit `46f2f29ff294725ccb41abc075c4d0902c4d75c3`.
+[Verify Verba — run 39241024862](https://github.com/mistrysaloni23-ops/verba-grammar-v2/actions/runs/39241024862) completed successfully for source commit `76a08f396b514a7b602339fcfacab5b4472ed7cd`.
 
 | Check | Actual result |
 | --- | --- |
 | Dependency installation | Passed with committed lockfile and `npm ci` |
-| Server tests | **53 passed; 0 failed; 0 skipped** |
+| Server tests | **56 passed; 0 failed; 0 skipped** |
 | TypeScript checking | Passed |
 | Vite production build | Passed |
 | Cloudflare Pages Functions compilation | Passed |
@@ -41,7 +41,7 @@ The [official documentation workflow](https://github.com/mistrysaloni23-ops/verb
 
 ## Still unverified / required before launch completion
 
-- Real D1 binding, encrypted runtime secrets and production Turnstile widget.
+- Final production configuration readiness and browser end-to-end checks after redeployment.
 - PR preview behavior via the owner's Cloudflare Git connection.
 - Authenticated eligibility and actual quotas for the owner's unbilled Gemini project.
 - Real corrections in both modes using Gemini 3.8 Flash and 3.6 Flash, full corpus comparison, human grammar/fluency/meaning review, and actual p50/p95 latency.
@@ -52,3 +52,13 @@ Cloudflare reports a successful production deployment of commit `f36957d7759e16a
 ## Acceptance status
 
 Source publication, build, automated application tests, and local Pages runtime verification are complete. The owner's overall completion requirements remain open until secure runtime configuration and live Gemini verification succeed.
+
+## Account setup and first live smoke test
+
+The secure setup workflow succeeded after the owner updated the Cloudflare token validity. A mapping error in the setup script was also fixed: Cloudflare returns a Turnstile widget's `secret` field. Regression tests now cover creation and reuse of that documented response. The deployment configuration was subsequently separated from local Wrangler configuration to preserve dashboard-managed runtime settings.
+
+The setup created/reused the real `verba-usage` D1 database, applied the schema, configured a production Turnstile widget and encrypted runtime secrets. The owner explicitly attested to an unbilled Gemini project. No billing endpoint was called.
+
+One reviewed Gemini 3.8 Flash smoke test returned `She doesn't have any information about the project.` from `She don't have a informations about project.` in **8,869 ms**, with one provider attempt. The correction fixes agreement, the mass noun and articles while preserving intent. This is one real sample, not an accuracy percentage or a latency distribution; it exceeds the 2–5 second target. Broader model and production checks are pending.
+
+Dedicated live verification is separate from regular CI. It uses synthetic cases and reserves every model-evaluation attempt against the real shared D1 budget. Production browser verification makes real requests and never bypasses Turnstile; an automated browser challenge failure must be reported as unverified rather than a successful correction.

@@ -2,7 +2,7 @@
 
 A React + TypeScript + Vite English editor with Google Gemini behind Cloudflare Pages Functions. The app implements minimal correction and natural rewriting, idle correction, mode-aware in-memory caching, cancellation, comparison, copy, clear, history, responsive layouts, and dark/light themes.
 
-**Status:** Deployed at **https://verba-grammar-v2.pages.dev** through Cloudflare Pages with GitHub integration. **53 server tests, 18 desktop/mobile browser tests, TypeScript, the production build and the local Pages runtime smoke test pass.** AI corrections remain unavailable pending secure account setup and live Gemini verification. See the [verification report](docs/VERIFICATION.md) and [secure setup guide](docs/SECURE-SETUP.md).
+**Status:** Deployed at **https://verba-grammar-v2.pages.dev** through Cloudflare Pages with GitHub integration. **56 server/setup tests, 18 desktop/mobile browser tests, TypeScript, the production build and the local Pages runtime smoke test pass.** The database, Turnstile and encrypted secrets are configured, and a real Gemini correction has succeeded. Production verification and the broader live model comparison are in progress. See the [verification report](docs/VERIFICATION.md) and [secure setup guide](docs/SECURE-SETUP.md).
 
 ## Architecture
 
@@ -26,7 +26,7 @@ The API remains unavailable until all required configuration is present. It neve
 
 ## Hosting and model setup
 
-See [deployment guide](docs/DEPLOYMENT.md) and [model evaluation plan](docs/MODELS.md). The intended host is **Cloudflare Pages**, with Git integration and a free D1 database. No Sites hosting, paid services, or billing changes have been made.
+See [deployment guide](docs/DEPLOYMENT.md) and [model evaluation plan](docs/MODELS.md). The production host is **Cloudflare Pages**, with Git integration and a free D1 database. No Sites hosting, paid services, or billing changes have been made.
 
 ## Safety and privacy properties
 
@@ -42,3 +42,5 @@ See [deployment guide](docs/DEPLOYMENT.md) and [model evaluation plan](docs/MODE
 - No analytics or writing logs are added. Google free-tier processing can include product improvement and human review. The UI has an explicit privacy notice and links to provider policies.
 
 A server allowlist cannot detect whether billing has been enabled on a Google project. Free-only operation requires an **unbilled API project**, independently verified model eligibility, and Cloudflare's free plans. The application cannot ensure perpetual free availability, prevent distributed abuse entirely, or guarantee every correction is correct.
+
+Production runtime settings and bindings are managed in Cloudflare. `wrangler.local.toml` is explicitly for local development; there is no root `wrangler.toml` to overwrite server settings during Git deployments.
