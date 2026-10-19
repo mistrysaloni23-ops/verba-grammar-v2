@@ -22,7 +22,7 @@ Latency includes D1 reservation and a possible provider retry. Complete-response
 
 Qualitative review by the AI assistant found the completed 3.8 examples grammatically sound and consistent with the references' meaning. This included fixing multiple simultaneous errors, natural rewriting, preserving negation and the name/quantity in `Dr. Rao has not approved the 15 mg dose.`, and preserving a correct sentence unchanged. Valid alternative wording is allowed: exact-reference matching is not an accuracy score. These observations are not independent human review or a population-level accuracy estimate.
 
-The baseline does **not** consistently meet the 2–5 second target. A supported lower-thinking configuration is being tested before any production tuning decision. Production continues to use Gemini 3.8; no automatic model switching exists.
+The baseline does **not** consistently meet the 2–5 second target. The lower-thinking sample below is too small and unreliable to justify a production tuning change. Production continues to use Gemini 3.8; no automatic model switching exists.
 
 ## Production checks
 
@@ -41,4 +41,15 @@ The authored corpus contains 120 cases across 15 categories; most have not yet b
 
 The owner’s real-browser request received Gemini HTTP 429. This establishes free-tier quota refusal, but the generic message alone does not distinguish a daily limit from a temporary request/token rate limit. Bulk live evaluation is paused. The diagnostic runner defaults to at most two attempts, stops all models on a quota response, and records only sanitized quota metric/limit/retry fields. Live tests are now manual-only and never run automatically on source pushes. No quota increase or paid billing was enabled.
 
-At 16:30 UTC, GitHub’s official status page reported an active Actions/Webhooks/Pages disruption with delayed workflow processing. The new CI and diagnostic runs were queued. This delays verification; it is separate from the website’s Gemini quota error. See https://www.githubstatus.com/.
+GitHub reported an Actions/Webhooks/Pages disruption on this date. Its job status updates lagged actual execution: delayed logs subsequently confirmed the latest CI passed **58 server/setup tests and 18 mocked browser tests**, including production build, Functions compilation and local Pages smoke checks. This is separate from the website's Gemini quota error. See https://www.githubstatus.com/.
+
+## Lower-thinking sample
+
+[Run 39286300195, first attempt](https://github.com/mistrysaloni23-ops/verba-grammar-v2/actions/runs/39286300195/attempts/1) executed at 16:32–16:36 UTC, before the bulk-test pause reached that run. [Sanitized synthetic results](results/low-thinking-2026-10-19.json). It made 12 outbound attempts including a retry, with `thinkingLevel: low`.
+
+- Gemini 3.8: two cases, zero successful corrections; one unavailable response and one quota error.
+- Gemini 3.6: nine cases, five successful corrections, two timeouts, one invalid response rejected by validation and one quota error.
+- The five successful 3.6 responses had median 2.820 s and p95 17.356 s. These elapsed times include any quota-reservation cooldown and retry, so they are not isolated provider latency. The small, failure-heavy sample cannot establish an improvement.
+- Both models returned quota errors. Production remains on 3.8 with provider-default thinking. No automatic switch, quota increase or paid billing was enabled.
+
+A separate bounded diagnostic rerun was requested to capture sanitized quota identifiers. Its result is pending. Until those details arrive, a daily versus short-term provider limit and the precise recovery time remain unconfirmed. Google's documented daily request limits reset at midnight Pacific; this is only relevant if the exhausted quota is daily. [Official rate-limit documentation](https://ai.google.dev/gemini-api/docs/rate-limits).

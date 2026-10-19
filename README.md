@@ -2,7 +2,7 @@
 
 A React + TypeScript + Vite English editor with Google Gemini behind Cloudflare Pages Functions. The app implements minimal correction and natural rewriting, idle correction, mode-aware in-memory caching, cancellation, comparison, copy, clear, history, responsive layouts, and dark/light themes.
 
-**Status:** Deployed at **https://verba-grammar-v2.pages.dev** through Cloudflare Pages with GitHub integration. The database, bot protection and encrypted secrets are configured. **56 server/setup tests and 18 mocked desktop/mobile browser tests passed** in the last completed baseline CI; newer validation changes have passed local tests and await CI. Both correction modes produced real Gemini results. The owner's browser reached Gemini but received HTTP 429, so successful end-to-end browser correction is still unverified. Bulk testing is paused to protect free usage. See [actual live results and current blockers](docs/LIVE-RESULTS.md), [verification report](docs/VERIFICATION.md), and [secure setup](docs/SECURE-SETUP.md).
+**Status:** Deployed at **https://verba-grammar-v2.pages.dev** through Cloudflare Pages with GitHub integration. The database, bot protection and encrypted secrets are configured. **58 server/setup tests and 18 mocked desktop/mobile browser tests passed**, including the latest response-validation changes. Both correction modes produced real Gemini results. The owner's browser reached Gemini but received HTTP 429, so successful end-to-end browser correction is still unverified. Bulk testing is paused to protect free usage. See [actual live results and current blockers](docs/LIVE-RESULTS.md), [verification report](docs/VERIFICATION.md), and [secure setup](docs/SECURE-SETUP.md).
 
 ## Architecture
 
@@ -11,7 +11,7 @@ A React + TypeScript + Vite English editor with Google Gemini behind Cloudflare 
 - `functions/api/correct.ts`: same-origin server endpoint; never returns a provider key or raw provider error.
 - `server/`: reusable mode-specific prompts, response validation, error mapping, HMAC visitor identity and atomic usage reservations.
 - `migrations/`: D1 usage schema. No submitted writing is stored.
-- `tests/cases.ts`: 120 human-authored references across 15 categories.
+- `tests/cases.ts`: 120 authored reference cases across 15 categories.
 - `tests/server.test.ts`: real SQLite enforcement tests with mocked Gemini and Turnstile HTTP.
 - `e2e/`: desktop/mobile browser scenarios with mocked API responses.
 - `scripts/evaluate.ts`: opt-in live evaluation with capped API attempts and latency recording.

@@ -2,12 +2,12 @@
 
 ## Successful GitHub Actions run
 
-[Verify Verba — run 39241024862](https://github.com/mistrysaloni23-ops/verba-grammar-v2/actions/runs/39241024862) completed successfully for source commit `76a08f396b514a7b602339fcfacab5b4472ed7cd`.
+[Verify Verba — run 39286300171](https://github.com/mistrysaloni23-ops/verba-grammar-v2/actions/runs/39286300171), job `118173387923`, has successful logs for source commit `46caff3e793181fb94f31ec3f1b8866f888e77e6`. GitHub status metadata lagged those logs during its Actions incident.
 
 | Check | Actual result |
 | --- | --- |
 | Dependency installation | Passed with committed lockfile and `npm ci` |
-| Server tests | **56 passed; 0 failed; 0 skipped** |
+| Server tests | **58 passed; 0 failed; 0 skipped** |
 | TypeScript checking | Passed |
 | Vite production build | Passed |
 | Cloudflare Pages Functions compilation | Passed |
@@ -29,7 +29,7 @@ Earlier CI failures revealed a Cloudflare tooling peer-dependency conflict, stri
 - One retry maximum, counting attempts conservatively, no quota retry, and cancellation before reservation/provider call or retry.
 - API key placement in the server header, rotating HMAC visitor identity, mode-aware cache keys and word counts.
 - Browser operation of both modes, manual/automatic correction, 2.5-second idle debounce, unchanged-input caching, composition pause, stale-response rejection, copy, comparison, clear, undo/redo, input cap, error presentation, themes, privacy dialog and responsive overflow.
-- Corpus integrity: **120 unique human-authored references across 15 categories**, including already correct text, ambiguity, multiple grammar errors, numbers, negation and paragraphs.
+- Corpus integrity: **120 unique authored references across 15 categories**, including already correct text, ambiguity, multiple grammar errors, numbers, negation and paragraphs.
 
 ## Mocked testing versus live verification
 
@@ -51,7 +51,7 @@ Cloudflare reports a successful production deployment of commit `f36957d7759e16a
 
 ## Acceptance status
 
-Source publication, build, automated application tests, and local Pages runtime verification are complete. The owner's overall completion requirements remain open until secure runtime configuration and live Gemini verification succeed.
+Source publication, build, automated application tests, and local Pages runtime verification are complete. The owner's overall completion requirements remain open until a real-user browser correction succeeds and the outstanding live quality and reliability checks are addressed. Secure runtime configuration and limited live model comparisons have succeeded.
 
 ## Account setup and first live smoke test
 
@@ -59,12 +59,12 @@ The secure setup workflow succeeded after the owner updated the Cloudflare token
 
 The setup created/reused the real `verba-usage` D1 database, applied the schema, configured a production Turnstile widget and encrypted runtime secrets. The owner explicitly attested to an unbilled Gemini project. No billing endpoint was called.
 
-One reviewed Gemini 3.8 Flash smoke test returned `She doesn't have any information about the project.` from `She don't have a informations about project.` in **8,869 ms**, with one provider attempt. The correction fixes agreement, the mass noun and articles while preserving intent. This is one real sample, not an accuracy percentage or a latency distribution; it exceeds the 2–5 second target. Broader model and production checks are pending.
+One reviewed Gemini 3.8 Flash smoke test returned `She doesn't have any information about the project.` from `She don't have a informations about project.` in **8,869 ms**, with one provider attempt. The correction fixes agreement, the mass noun and articles while preserving intent. This is one real sample, not an accuracy percentage or a latency distribution; it exceeds the 2–5 second target. Broader model and production results are recorded in LIVE-RESULTS.md.
 
 Dedicated live verification is separate from regular CI. It uses synthetic cases and reserves every model-evaluation attempt against the real shared D1 budget. Production browser verification makes real requests and never bypasses Turnstile; an automated browser challenge failure must be reported as unverified rather than a successful correction.
 
 ## Latest outcome
 
-Production readiness, real synthetic model comparisons and deployed desktop/mobile layout checks are now recorded in [LIVE-RESULTS.md](LIVE-RESULTS.md). The owner’s real-browser request reached Gemini but received HTTP 429. This is a provider quota refusal, not successful correction. The live suite is manual-only and defaults to two attempts; the already queued diagnostic also uses that cap when it starts. No billing changes were made.
+Production readiness, real synthetic model comparisons and deployed desktop/mobile layout checks are now recorded in [LIVE-RESULTS.md](LIVE-RESULTS.md). The owner’s real-browser request reached Gemini but received HTTP 429. This is a provider quota refusal, not successful correction. The live suite is manual-only and defaults to two attempts; future diagnostics stop all models on the first quota response. No billing changes were made.
 
-The most recent validation hardening rejects a model’s echoed JSON input envelope and supports a server-side thinking-level setting. These changes passed the local test suites; the new full GitHub checks and capped live diagnostic are queued during GitHub’s reported Actions disruption. Production thinking remains at the provider default pending measured tuning results.
+The most recent validation hardening rejects a model’s echoed JSON input envelope and supports a server-side thinking-level setting. These changes passed 58 server/setup tests and all 18 mocked browser checks in the latest GitHub job logs. The limited lower-thinking run returned quota errors for both models; a separate bounded quota diagnostic is pending. Production thinking remains at the provider default pending measured tuning results.

@@ -1,0 +1,138 @@
+{
+  "startedAt": "2026-10-19T16:32:55.056Z",
+  "origin": "https://verba-grammar-v2.pages.dev",
+  "cap": 34,
+  "thinkingLevel": "low",
+  "rows": [
+    {
+      "id": "basic-1",
+      "model": "gemini-3.8-flash",
+      "error": "UNAVAILABLE",
+      "latencyMs": 1564
+    },
+    {
+      "id": "advanced-1",
+      "model": "gemini-3.8-flash",
+      "error": "QUOTA",
+      "latencyMs": 273
+    },
+    {
+      "id": "basic-1",
+      "model": "gemini-3.6-flash",
+      "error": "TIMEOUT",
+      "latencyMs": 12101
+    },
+    {
+      "id": "advanced-1",
+      "category": "advanced",
+      "input": "If I would have known, I would have called.",
+      "reference": "If I had known, I would have called.",
+      "mode": "correct",
+      "unchanged": false,
+      "model": "gemini-3.6-flash",
+      "output": "If I had known, I would have called.",
+      "latencyMs": 17356,
+      "exactReferenceMatch": true
+    },
+    {
+      "id": "multiple_errors-1",
+      "model": "gemini-3.6-flash",
+      "error": "TIMEOUT",
+      "latencyMs": 12679
+    },
+    {
+      "id": "articles-1",
+      "category": "articles",
+      "input": "He is a honest person.",
+      "reference": "He is an honest person.",
+      "mode": "correct",
+      "unchanged": false,
+      "model": "gemini-3.6-flash",
+      "output": "He is an honest person.",
+      "latencyMs": 7813,
+      "exactReferenceMatch": true
+    },
+    {
+      "id": "prepositions-1",
+      "category": "prepositions",
+      "input": "We discussed about the proposal.",
+      "reference": "We discussed the proposal.",
+      "mode": "correct",
+      "unchanged": false,
+      "model": "gemini-3.6-flash",
+      "output": "We discussed the proposal.",
+      "latencyMs": 1356,
+      "exactReferenceMatch": true
+    },
+    {
+      "id": "irregular_verbs-1",
+      "model": "gemini-3.6-flash",
+      "error": "INVALID_RESPONSE",
+      "latencyMs": 6365
+    },
+    {
+      "id": "natural-1",
+      "category": "natural",
+      "input": "I am writing this message for telling you that I cannot be able to attend tomorrow meeting.",
+      "reference": "I'm writing to let you know that I can't attend tomorrow's meeting.",
+      "mode": "natural",
+      "unchanged": false,
+      "model": "gemini-3.6-flash",
+      "output": "I'm writing to let you know that I can't attend tomorrow's meeting.",
+      "latencyMs": 2820,
+      "exactReferenceMatch": true
+    },
+    {
+      "id": "professional-1",
+      "category": "professional",
+      "input": "Please finds attached the report.",
+      "reference": "Please find the attached report.",
+      "mode": "correct",
+      "unchanged": false,
+      "model": "gemini-3.6-flash",
+      "output": "Please find attached the report.",
+      "latencyMs": 941,
+      "exactReferenceMatch": false
+    },
+    {
+      "id": "casual-1",
+      "model": "gemini-3.6-flash",
+      "error": "QUOTA",
+      "latencyMs": 251
+    }
+  ],
+  "freeTierConfirmed": true,
+  "production": {
+    "homepage": 200,
+    "ready": true,
+    "turnstileRequired": true,
+    "missingTokenRejected": true
+  },
+  "attempts": 12,
+  "models": [
+    {
+      "model": "gemini-3.8-flash",
+      "evaluated": 2,
+      "successful": 0,
+      "p50Ms": null,
+      "p95Ms": null
+    },
+    {
+      "model": "gemini-3.6-flash",
+      "evaluated": 9,
+      "successful": 5,
+      "p50Ms": 2820,
+      "p95Ms": 17356
+    }
+  ],
+  "note": "Real Gemini calls with synthetic writing, counted against the shared production budget. Model timings include D1 reservation, any rate-limit cooldown and any retry. Reference matches are not accuracy scores. Browser corrections and human quality review are separate.",
+  "workflow": "https://github.com/mistrysaloni23-ops/verba-grammar-v2/actions/runs/39286300195/attempts/1",
+  "review": {
+    "reviewer": "AI assistant; not independent human evaluation",
+    "notes": [
+      "The five completed 3.6 corrections preserve meaning in these synthetic examples; the professional-message output is a valid reference alternative.",
+      "Both models returned quota errors. This sample cannot establish a production latency or quality improvement.",
+      "This first attempt ran before the bulk-test pause; future diagnostics default to two attempts and stop all models on quota refusal."
+    ]
+  }
+}

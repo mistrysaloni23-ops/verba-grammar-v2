@@ -24,7 +24,7 @@ Google documents `low`, `medium`, and `high` thinking for 3.8; `minimal` is expl
 - [Thinking](https://ai.google.dev/gemini-api/docs/thinking?hl=en)
 - [Data-use terms](https://ai.google.dev/gemini-api/terms?hl=en)
 
-The standard free-tier pricing table marks both input and output as free and marks product-improvement use as **Yes**. The terms explicitly describe human review of unpaid API inputs/outputs and warn against submitting sensitive, confidential or personal information. The UI reflects this. The terms provide a regional exception for the EEA, Switzerland and UK. The owner still needs to confirm project billing status and regional availability; Verba cannot infer these from public pricing.
+The standard free-tier pricing table marks both input and output as free and marks product-improvement use as **Yes**. The terms explicitly describe human review of unpaid API inputs/outputs and warn against submitting sensitive, confidential or personal information. The UI reflects this. The terms provide a regional exception for the EEA, Switzerland and UK. The owner explicitly confirmed that the project has no paid billing, and live calls succeeded. Verba cannot infer billing status from public pricing or prevent a later account billing change.
 
 ## Evaluation protocol
 
@@ -45,4 +45,4 @@ Plain text avoids depending on unverified structured-output support. The respons
 
 ## Actual results and tuning status
 
-See [live results](LIVE-RESULTS.md) for actual requests, outputs, error counts and measured response times. Gemini 3.8 remains selected after the qualitative comparison; it is not consistently within the latency target. The `GEMINI_THINKING_LEVEL` server variable supports `low`, `medium` or `high`; omitting it retains the provider default. Lower-thinking testing is queued and production has not been tuned without evidence. The dedicated evaluation workflow is manual-only, defaults to two attempts and stops all testing when a provider quota response arrives.
+See [live results](LIVE-RESULTS.md) for actual requests, outputs, error counts and measured response times. Gemini 3.8 remains selected after the qualitative comparison; it is not consistently within the latency target. The `GEMINI_THINKING_LEVEL` server variable supports `low`, `medium` or `high`; omitting it retains the provider default. The limited lower-thinking run completed with provider quota errors for both models, timeouts and one rejected invalid response. It does not justify changing production settings. The dedicated evaluation workflow is manual-only, defaults to two attempts and stops all testing when a provider quota response arrives.
