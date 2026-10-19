@@ -6,10 +6,10 @@ Official model, pricing, thinking and data-use pages were retrieved in English b
 
 | Candidate | Official status | Standard free-tier text pricing | English-editing quality | Actual latency/reliability |
 | --- | --- | --- | --- | --- |
-| `gemini-3.8-flash` | Stable; updated September 2026; described as Google's most intelligent Flash model | Input and output, including thinking tokens: free of charge | Not yet tested live | Not yet measured |
-| `gemini-3.6-flash` | Stable; updated July 2026; described as the previous generation balancing speed and capability | Input and output, including thinking tokens: free of charge | Not yet tested live | Not yet measured |
+| `gemini-3.8-flash` | Stable; updated September 2026; described as Google's most intelligent Flash model | Input and output, including thinking tokens: free of charge | Baseline samples reviewed; see LIVE-RESULTS.md | Measured baseline; includes timeouts |
+| `gemini-3.6-flash` | Stable; updated July 2026; described as the previous generation balancing speed and capability | Input and output, including thinking tokens: free of charge | Baseline samples reviewed; one JSON-format failure | Measured baseline; incomplete due to limiter |
 
-Both requested names are valid documented model IDs. Both support text output, a 1,048,576-token input context, and up to 65,536 output tokens. These are provider specifications, not measurements from Verba. Free-tier availability and actual quotas for the owner's project still need an authenticated check.
+Both requested names are valid documented model IDs. Both support text output, a 1,048,576-token input context, and up to 65,536 output tokens. These are provider specifications, not measurements from Verba. Authenticated requests succeeded for both candidates on the owner's attested unbilled project. Exact account quotas remain unverified; the owner's subsequent production request received HTTP 429.
 
 The quality-first candidate is **gemini-3.8-flash**, with **gemini-3.6-flash** as the comparison candidate. This is provisional based on Google's model descriptions; it is not an assertion that 3.8 produces better corrections or meets the latency target. No automatic fallback is implemented, and production AI stays disabled until the selected model and unbilled project are configured.
 
@@ -42,3 +42,7 @@ The standard free-tier pricing table marks both input and output as free and mar
 Both modes share constraints for whole-text editing, no invented facts, preservation of names/numbers/negation, and treating the source as data. Correct English explicitly leaves already correct sentences unchanged. Make It Natural permits clearer phrasing without excessive formality. Temperature is 0.15, maximum output 4,096 tokens, with a 4,000-character input limit. These settings are provisional until measured against the selected model; thinking defaults can affect latency and token limits.
 
 Plain text avoids depending on unverified structured-output support. The response must be nonempty, bounded, unfenced, and have finish reason `STOP`. This catches many transport and truncation failures but cannot guarantee semantic quality. The application never labels response validation as an accuracy test.
+
+## Actual results and tuning status
+
+See [live results](LIVE-RESULTS.md) for actual requests, outputs, error counts and measured response times. Gemini 3.8 remains selected after the qualitative comparison; it is not consistently within the latency target. The `GEMINI_THINKING_LEVEL` server variable supports `low`, `medium` or `high`; omitting it retains the provider default. Lower-thinking testing is queued and production has not been tuned without evidence. The dedicated evaluation workflow is manual-only, defaults to two attempts and stops all testing when a provider quota response arrives.
