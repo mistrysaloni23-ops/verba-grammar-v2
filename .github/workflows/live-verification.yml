@@ -5,8 +5,8 @@ on:
       max_requests:
         description: Maximum provider attempts; respect remaining free allowance
         type: choice
-        options: ['2', '16', '34']
-        default: '2'
+        options: ['1', '2', '16', '34']
+        default: '1'
       thinking:
         description: Thinking configuration to evaluate
         type: choice
@@ -35,7 +35,7 @@ jobs:
           CLOUDFLARE_ACCOUNT_ID: c521e3f1a7e4896141c63556142e9d79
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
-          EVAL_MAX_REQUESTS: ${{ inputs.max_requests || '2' }}
+          EVAL_MAX_REQUESTS: ${{ inputs.max_requests || '1' }}
           EVAL_THINKING_LEVEL: ${{ inputs.thinking || 'low' }}
         run: node scripts/verify-live.ts
       - uses: actions/upload-artifact@v4

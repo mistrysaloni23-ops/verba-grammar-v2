@@ -12,7 +12,7 @@ const key = process.env.GEMINI_API_KEY;
 if (!account || !token || !key) throw new Error('Required credentials are missing.');
 const origin = 'https://verba-grammar-v2.pages.dev';
 const models = ['gemini-3.8-flash', 'gemini-3.6-flash'];
-const cap = Number(process.env.EVAL_MAX_REQUESTS ?? '2');
+const cap = Number(process.env.EVAL_MAX_REQUESTS ?? '1');
 if (!Number.isSafeInteger(cap) || cap < 1 || cap > 34) throw new Error('Evaluation cap must be between 1 and 34.');
 const thinkingSetting = process.env.EVAL_THINKING_LEVEL ?? 'low';
 if (!['default','low','medium','high'].includes(thinkingSetting)) throw new Error('Invalid thinking setting.');
